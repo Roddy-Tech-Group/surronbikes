@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "trix/dist/trix.css";
+
+@source "../views/**/*.blade.php";
+@source "../js/**/*.js";
+@source "../../storage/framework/views/*.php";
