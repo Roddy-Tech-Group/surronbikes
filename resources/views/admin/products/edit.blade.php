@@ -17,7 +17,29 @@
           x-data="{ 
             name: '{{ old('name', addslashes($product->name)) }}', 
             slug: '{{ old('slug', $product->slug) }}',
-            specs: {{ old('specifications', json_encode($product->specifications ?? [])) }}
+            specs: {{ old('specifications', json_encode($product->specifications ?? [])) }},
+            imagePreviews: [],
+            dt: new DataTransfer(),
+            handleFileChange(event) {
+                const files = event.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    let exists = false;
+                    for (let j = 0; j < this.dt.files.length; j++) {
+                        if (this.dt.files[j].name === files[i].name && this.dt.files[j].size === files[i].size) {
+                            exists = true; break;
+                        }
+                    }
+                    if (!exists) {
+                        this.dt.items.add(files[i]);
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.imagePreviews.push(e.target.result);
+                        };
+                        reader.readAsDataURL(files[i]);
+                    }
+                }
+                event.target.files = this.dt.files;
+            }
           }">
         @csrf
         @method('PUT')
@@ -35,20 +57,20 @@
                         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <div class="sm:col-span-2">
                                 <label for="name" class="block text-sm font-medium text-gray-700">Product Name <span class="text-red-500">*</span></label>
-                                <input type="text" name="name" id="name" x-model="name" required class="mt-1 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input type="text" name="name" id="name" x-model="name" required class="mt-1 py-3 px-4 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full text-base border-gray-400 rounded-md">
                                 @error('name')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
 
                             <div class="sm:col-span-2">
                                 <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                                <input type="text" name="slug" id="slug" x-model="slug" class="mt-1 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input type="text" name="slug" id="slug" x-model="slug" class="mt-1 py-3 px-4 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full text-base border-gray-400 rounded-md">
                                 <p class="mt-1 text-xs text-gray-500">Leave blank to regenerate. Auto preview: <span class="font-mono text-gray-700" x-text="name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')"></span></p>
                                 @error('slug')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
 
                             <div>
                                 <label for="category_id" class="block text-sm font-medium text-gray-700">Category <span class="text-red-500">*</span></label>
-                                <select name="category_id" id="category_id" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                                <select name="category_id" id="category_id" required class="mt-1 block w-full pl-4 pr-10 py-3 text-base border-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 rounded-md">
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
@@ -62,7 +84,7 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <span class="text-gray-500 sm:text-sm">$</span>
                                     </div>
-                                    <input type="number" name="price" id="price" value="{{ old('price', $product->price) }}" required step="0.01" min="0" class="focus:ring-orange-500 focus:border-orange-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+                                    <input type="number" name="price" id="price" value="{{ old('price', $product->price) }}" required step="0.01" min="0" class="focus:ring-orange-500 focus:border-orange-500 py-3 block w-full pl-9 pr-12 text-base border-gray-400 rounded-md">
                                 </div>
                                 @error('price')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
@@ -97,10 +119,10 @@
                         <template x-for="(spec, index) in specs" :key="index">
                             <div class="flex gap-4 items-start">
                                 <div class="flex-1">
-                                    <input type="text" x-model="spec.name" :name="'specifications['+index+'][name]'" placeholder="e.g. Battery" class="mt-1 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    <input type="text" x-model="spec.name" :name="'specifications['+index+'][name]'" placeholder="e.g. Battery" class="mt-1 py-3 px-4 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full text-base border-gray-400 rounded-md">
                                 </div>
                                 <div class="flex-1">
-                                    <input type="text" x-model="spec.value" :name="'specifications['+index+'][value]'" placeholder="e.g. 60V 32Ah" class="mt-1 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    <input type="text" x-model="spec.value" :name="'specifications['+index+'][value]'" placeholder="e.g. 60V 32Ah" class="mt-1 py-3 px-4 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full text-base border-gray-400 rounded-md">
                                 </div>
                                 <div class="pt-1">
                                     <button type="button" @click="specs.splice(index, 1)" class="mt-1 p-2 text-gray-400 hover:text-red-500 rounded-md hover:bg-red-50">
@@ -176,11 +198,20 @@
                                 <div class="flex text-sm text-gray-600 justify-center">
                                     <label for="images" class="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500">
                                         <span>Upload files</span>
-                                        <input id="images" name="images[]" type="file" multiple class="sr-only" accept="image/jpeg,image/png,image/webp">
+                                        <input id="images" name="images[]" type="file" multiple class="sr-only" accept="image/jpeg,image/png,image/webp" @change="handleFileChange">
                                     </label>
                                 </div>
                                 <p class="text-xs text-gray-500">PNG, JPG, WEBP up to 5MB</p>
                             </div>
+                        </div>
+
+                        <!-- Image Previews -->
+                        <div x-show="imagePreviews.length > 0" class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-4" style="display: none;">
+                            <template x-for="(preview, index) in imagePreviews" :key="index">
+                                <div class="relative rounded-lg overflow-hidden border border-gray-200 aspect-square shadow-sm">
+                                    <img :src="preview" class="w-full h-full object-cover">
+                                </div>
+                            </template>
                         </div>
                         @error('images')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
@@ -193,7 +224,7 @@
                     </div>
                     <div class="p-6">
                         <label for="video_url" class="block text-sm font-medium text-gray-700">Video URL</label>
-                        <input type="url" name="video_url" id="video_url" value="{{ old('video_url', $product->video_url) }}" class="mt-1 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="YouTube or Vimeo URL">
+                        <input type="url" name="video_url" id="video_url" value="{{ old('video_url', $product->video_url) }}" class="mt-1 py-3 px-4 shadow-sm focus:ring-orange-500 focus:border-orange-500 block w-full text-base border-gray-400 rounded-md" placeholder="YouTube or Vimeo URL">
                     </div>
                 </div>
 

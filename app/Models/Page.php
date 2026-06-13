@@ -10,6 +10,8 @@ class Page extends Model
         'slug',
         'title',
         'content',
+        'meta_title',
+        'meta_description',
     ];
 
     public static function findBySlug(string $slug): ?self

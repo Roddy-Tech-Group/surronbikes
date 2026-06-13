@@ -18,32 +18,20 @@
         </div>
     </div>
 
-    {{-- Search Filter --}}
-    <div class="bg-white p-4 rounded-t-xl border border-gray-200 border-b-0">
-        <form method="GET" action="{{ route('admin.categories.index') }}" class="max-w-md">
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        @if($categories->isEmpty())
+            <div class="px-6 py-16 text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                     </svg>
                 </div>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search categories..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-orange-500 focus:border-orange-500 placeholder-gray-400">
-            </div>
-        </form>
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-b-xl shadow-sm overflow-hidden">
-        @if($categories->isEmpty())
-            <div class="px-6 py-12 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-                </svg>
-                <h3 class="mt-2 text-sm font-semibold text-gray-900">No categories found</h3>
-                <p class="mt-1 text-sm text-gray-500">
+                <h3 class="text-base font-semibold text-gray-900">No categories found</h3>
+                <p class="mt-1 text-sm text-gray-500 max-w-sm mx-auto">
                     @if(request()->filled('search'))
-                        No categories matched your search criteria. <a href="{{ route('admin.categories.index') }}" class="text-orange-500 hover:text-orange-600">Clear search</a>
+                        No categories matched your search criteria. <a href="{{ route('admin.categories.index') }}" class="text-orange-500 hover:text-orange-600 transition-colors">Clear search</a>
                     @else
-                        Get started by creating a new category.
+                        Get started by creating a new category to organize your products.
                     @endif
                 </p>
             </div>

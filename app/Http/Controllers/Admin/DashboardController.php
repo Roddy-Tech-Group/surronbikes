@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         $recentOrders = Order::with('paymentMethod')
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
 
         return view('admin.dashboard', compact('stats', 'recentOrders'));
