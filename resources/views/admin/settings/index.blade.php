@@ -110,6 +110,107 @@
             </div>
         </div>
 
+        {{-- About Us Page --}}
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 sm:px-8 py-5 border-b border-gray-200 bg-gray-50/80">
+                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2.5">
+                    <div class="w-8 h-8 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-4.5 h-4.5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        </svg>
+                    </div>
+                    About Us Page
+                </h3>
+            </div>
+            <div class="p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row gap-6 items-start" x-data="{ 
+                    previewUrl: '{{ isset($settings['about_us_image_path']) ? Storage::url($settings['about_us_image_path']) : '' }}',
+                    fileChosen(event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            this.previewUrl = URL.createObjectURL(file);
+                        }
+                    }
+                }">
+                    <div class="w-full sm:w-1/2">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">About Us Hero Image</label>
+                        <div class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <template x-if="previewUrl">
+                                <img :src="previewUrl" class="max-h-48 object-cover rounded-lg mb-4" alt="About Us Preview">
+                            </template>
+                            <template x-if="!previewUrl">
+                                <div class="h-32 flex items-center justify-center text-gray-400 mb-4">
+                                    <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                    </svg>
+                                </div>
+                            </template>
+                            
+                            <label class="relative cursor-pointer bg-white py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm text-sm leading-4 font-semibold text-gray-700 hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500 transition-colors">
+                                <span>Upload a file</span>
+                                <input type="file" name="about_us_image" class="sr-only" @change="fileChosen" accept="image/png, image/jpeg, image/webp">
+                            </label>
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500">PNG, JPG, or WEBP up to 4MB. Recommended ratio 16:9.</p>
+                        @error('about_us_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+
+                        @if(isset($settings['about_us_image_path']))
+                            <div class="mt-3 flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="delete_about_us_image" name="delete_about_us_image" type="checkbox" value="1" class="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="delete_about_us_image" class="font-medium text-red-700">Remove existing image</label>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="w-full sm:w-1/2" x-data="{ 
+                        previewUrl2: '{{ isset($settings['about_us_story_image_path']) ? Storage::url($settings['about_us_story_image_path']) : '' }}',
+                        fileChosen2(event) {
+                            const file = event.target.files[0];
+                            if (file) {
+                                this.previewUrl2 = URL.createObjectURL(file);
+                            }
+                        }
+                    }">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Company Story Side Image</label>
+                        <div class="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <template x-if="previewUrl2">
+                                <img :src="previewUrl2" class="max-h-48 object-cover rounded-lg mb-4" alt="Company Story Preview">
+                            </template>
+                            <template x-if="!previewUrl2">
+                                <div class="h-32 flex items-center justify-center text-gray-400 mb-4">
+                                    <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                    </svg>
+                                </div>
+                            </template>
+                            
+                            <label class="relative cursor-pointer bg-white py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm text-sm leading-4 font-semibold text-gray-700 hover:bg-gray-50 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500 transition-colors">
+                                <span>Upload a file</span>
+                                <input type="file" name="about_us_story_image" class="sr-only" @change="fileChosen2" accept="image/png, image/jpeg, image/webp">
+                            </label>
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500">PNG, JPG, or WEBP up to 4MB.</p>
+                        @error('about_us_story_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+
+                        @if(isset($settings['about_us_story_image_path']))
+                            <div class="mt-3 flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="delete_about_us_story_image" name="delete_about_us_story_image" type="checkbox" value="1" class="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="delete_about_us_story_image" class="font-medium text-red-700">Remove existing image</label>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Social Links --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="px-6 sm:px-8 py-5 border-b border-gray-200 bg-gray-50/80">

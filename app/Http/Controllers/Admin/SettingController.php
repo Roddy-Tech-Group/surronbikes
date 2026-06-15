@@ -28,6 +28,10 @@ class SettingController extends Controller
             // Branding
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg,webp|max:2048',
             
+            // About Us
+            'about_us_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'about_us_story_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            
             // Social Links
             'social_facebook' => 'nullable|url|max:255',
             'social_instagram' => 'nullable|url|max:255',
@@ -54,6 +58,46 @@ class SettingController extends Controller
                 Storage::disk('public')->delete($oldLogo);
             }
             Setting::set('logo_path', null);
+        }
+
+        // Handle About Us Image Upload
+        if ($request->hasFile('about_us_image')) {
+            $oldAboutImage = Setting::get('about_us_image_path');
+            if ($oldAboutImage && Storage::disk('public')->exists($oldAboutImage)) {
+                Storage::disk('public')->delete($oldAboutImage);
+            }
+            
+            $path = $request->file('about_us_image')->store('settings', 'public');
+            Setting::set('about_us_image_path', $path);
+        }
+
+        // Handle About Us Image Deletion
+        if ($request->boolean('delete_about_us_image')) {
+            $oldAboutImage = Setting::get('about_us_image_path');
+            if ($oldAboutImage && Storage::disk('public')->exists($oldAboutImage)) {
+                Storage::disk('public')->delete($oldAboutImage);
+            }
+            Setting::set('about_us_image_path', null);
+        }
+
+        // Handle About Us Story Image Upload
+        if ($request->hasFile('about_us_story_image')) {
+            $oldStoryImage = Setting::get('about_us_story_image_path');
+            if ($oldStoryImage && Storage::disk('public')->exists($oldStoryImage)) {
+                Storage::disk('public')->delete($oldStoryImage);
+            }
+            
+            $path = $request->file('about_us_story_image')->store('settings', 'public');
+            Setting::set('about_us_story_image_path', $path);
+        }
+
+        // Handle About Us Story Image Deletion
+        if ($request->boolean('delete_about_us_story_image')) {
+            $oldStoryImage = Setting::get('about_us_story_image_path');
+            if ($oldStoryImage && Storage::disk('public')->exists($oldStoryImage)) {
+                Storage::disk('public')->delete($oldStoryImage);
+            }
+            Setting::set('about_us_story_image_path', null);
         }
 
         // Save other settings

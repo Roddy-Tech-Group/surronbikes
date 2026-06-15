@@ -48,7 +48,8 @@
                     ['route' => 'admin.payment-methods.index', 'label' => 'Payment Methods', 'icon' => 'credit-card', 'match' => 'admin.payment-methods*'],
                     ['route' => 'admin.contact-messages.index', 'label' => 'Contact Messages', 'icon' => 'envelope', 'match' => 'admin.contact-messages*'],
                     ['route' => 'admin.faqs.index', 'label' => 'FAQs', 'icon' => 'question', 'match' => 'admin.faqs*'],
-                    ['route' => 'admin.media.index', 'label' => 'Media Manager', 'icon' => 'photo', 'match' => 'admin.media*'],
+                    ['route' => 'admin.testimonials.index', 'label' => 'Testimonials', 'icon' => 'star', 'match' => 'admin.testimonials*'],
+
                     ['route' => 'admin.admins.index', 'label' => 'Administrators', 'icon' => 'user-group', 'match' => 'admin.admins*'],
                     ['route' => 'admin.settings.index', 'label' => 'Settings', 'icon' => 'cog', 'match' => 'admin.settings*'],
                 ];

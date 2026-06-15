@@ -31,11 +31,15 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // Share global data with the storefront layout
-        View::composer('layouts.storefront', function ($view) {
+        // Share global data with the storefront layout and views
+        View::composer(['layouts.storefront', 'storefront.*'], function ($view) {
             if (Schema::hasTable('categories') && Schema::hasTable('settings')) {
-                $view->with('globalCategories', Category::orderBy('name')->get());
-                $view->with('globalSettings', Setting::pluck('value', 'key')->toArray());
+                if (! $view->offsetExists('globalCategories')) {
+                    $view->with('globalCategories', Category::orderBy('name')->get());
+                }
+                if (! $view->offsetExists('globalSettings')) {
+                    $view->with('globalSettings', Setting::pluck('value', 'key')->toArray());
+                }
             }
         });
     }

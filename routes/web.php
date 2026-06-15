@@ -65,6 +65,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('admins/{admin}/password', [\App\Http\Controllers\Admin\AdminController::class, 'editPassword'])->name('admins.password');
         Route::patch('admins/{admin}/password', [\App\Http\Controllers\Admin\AdminController::class, 'updatePassword'])->name('admins.password.update');
 
+        // Testimonials
+        Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->except(['show']);
+
         // Media Manager
         Route::get('media', [\App\Http\Controllers\Admin\MediaController::class, 'index'])->name('media.index');
         Route::post('media', [\App\Http\Controllers\Admin\MediaController::class, 'store'])->name('media.store');
@@ -107,4 +110,5 @@ Route::get('/contact', [\App\Http\Controllers\Storefront\ContactController::clas
 Route::post('/contact', [\App\Http\Controllers\Storefront\ContactController::class, 'store'])->name('contact.store');
 
 // Catch-all for dynamic pages (Must be at the bottom of standard pages)
+Route::post('/testimonials', [\App\Http\Controllers\Storefront\PageController::class, 'storeTestimonial'])->name('testimonials.store');
 Route::get('/pages/{slug}', [\App\Http\Controllers\Storefront\PageController::class, 'show'])->name('page.show');
