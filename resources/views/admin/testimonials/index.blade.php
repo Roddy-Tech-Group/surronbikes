@@ -19,7 +19,7 @@
     <ul role="list" class="divide-y divide-gray-200">
         @forelse($testimonials as $testimonial)
             <li>
-                <div class="px-4 py-4 sm:px-6 flex items-center justify-between">
+                <div class="px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div class="flex items-center">
                         @if($testimonial->image_path)
                             <img src="{{ Storage::url($testimonial->image_path) }}" alt="" class="h-12 w-12 rounded-full object-cover mr-4">
@@ -37,23 +37,23 @@
                             </p>
                         </div>
                     </div>
-                    <div class="ml-2 flex-shrink-0 flex items-center space-x-4">
+                    <div class="flex flex-wrap items-center gap-3 sm:ml-2">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $testimonial->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                             {{ $testimonial->is_active ? 'Active' : 'Inactive' }}
                         </span>
                         
-                        <div class="flex items-center text-yellow-400">
+                        <div class="flex items-center text-yellow-400 mr-2">
                             @for($i = 0; $i < $testimonial->rating; $i++)
                                 <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                             @endfor
                         </div>
 
-                        <div class="flex space-x-2">
-                            <a href="{{ route('admin.testimonials.edit', $testimonial) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</a>
+                        <div class="flex space-x-3 w-full sm:w-auto mt-2 sm:mt-0 justify-end sm:justify-start">
+                            <a href="{{ route('admin.testimonials.edit', $testimonial) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium px-2 py-1 bg-indigo-50 rounded hover:bg-indigo-100 transition-colors">Edit</a>
                             <form action="{{ route('admin.testimonials.destroy', $testimonial) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this testimonial?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium">Delete</button>
+                                <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium px-2 py-1 bg-red-50 rounded hover:bg-red-100 transition-colors">Delete</button>
                             </form>
                         </div>
                     </div>

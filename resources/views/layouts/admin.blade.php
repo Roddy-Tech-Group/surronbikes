@@ -239,6 +239,15 @@
 
             @yield('content')
         </main>
+
+        {{-- Admin Footer --}}
+        <footer class="mt-auto border-t border-gray-200 bg-white px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+                <div>
+                    &copy; {{ date('Y') }} SuronBikes. All rights reserved.
+                </div>
+            </div>
+        </footer>
     </div>
     @stack('scripts')
 </body>
